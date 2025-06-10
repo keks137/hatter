@@ -21,15 +21,28 @@ fn main() -> std::io::Result<()> {
     let file_type = file_path.extension().unwrap();
     if file_type != "c" {
         eprintln!(
-            "Please insert a .c file, not a .{} file",
+            "Please supply a .c file, not a .{} file",
             &file_type.to_str().unwrap()
         );
+        process::exit(1);
     }
-    let file_stem = file_path.file_stem();
+
+    let header_path = file_path.with_extension("h");
+    //let file_stem = file_path.file_stem().unwrap();
 
     //println!("{:?}", &file_type);
-    //let include_name = format("INCLUDE_", );
-    println!("#ifndef ");
+    let include_name = format!(
+        "INCLUDE_{}_H_",
+        file_path
+            .with_extension("")
+            .as_os_str()
+            .to_str()
+            .unwrap()
+            .replace("/", "_")
+            .to_uppercase()
+    );
+    println!("#ifndef {include_name}");
+    println!("#define {include_name}");
     let mut buf_reader = BufReader::new(&file);
     let mut contents = String::new();
     buf_reader.read_to_string(&mut contents)?;
@@ -55,5 +68,6 @@ fn main() -> std::io::Result<()> {
         }
         println!("{};", buffer.trim());
     }
+    println!("#endif //{include_name}");
     Ok(())
 }
