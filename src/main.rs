@@ -1,10 +1,13 @@
 use std::collections::HashSet;
+use std::env;
+use std::fmt::Write as _;
 use std::fmt::format;
+use std::fs::File;
 use std::io::BufReader;
+use std::io::Write;
 use std::io::prelude::*;
 use std::path::Path;
 use std::process;
-use std::{env, fs::File};
 
 fn main() -> std::io::Result<()> {
     let types: HashSet<&str> = ["int", "bool", "void", "float"].iter().cloned().collect();
@@ -29,6 +32,7 @@ fn main() -> std::io::Result<()> {
 
     let header_path = file_path.with_extension("h");
     //let file_stem = file_path.file_stem().unwrap();
+    let mut header_contents = String::new();
 
     //println!("{:?}", &file_type);
     let include_name = format!(
@@ -41,8 +45,8 @@ fn main() -> std::io::Result<()> {
             .replace("/", "_")
             .to_uppercase()
     );
-    println!("#ifndef {include_name}");
-    println!("#define {include_name}");
+    let _ = writeln!(&mut header_contents, "#ifndef {include_name}");
+    let _ = writeln!(&mut header_contents, "#define {include_name}");
     let mut buf_reader = BufReader::new(&file);
     let mut contents = String::new();
     buf_reader.read_to_string(&mut contents)?;
@@ -66,8 +70,11 @@ fn main() -> std::io::Result<()> {
                 _ => buffer.push(c),
             }
         }
-        println!("{};", buffer.trim());
+        let _ = writeln!(&mut header_contents, "{};", buffer.trim());
     }
-    println!("#endif //{include_name}");
+    let _ = writeln!(&mut header_contents, "#endif //{include_name}");
+    let mut header_file = File::create(header_path)?;
+    let _ = header_file.write_all(header_contents.as_bytes());
+
     Ok(())
 }
