@@ -23,6 +23,7 @@ bool moveableLeft();
 bool moveableRight();
 void processMoveable();
 void processInput();
+unsigned int getScore();
 void drawScore();
 void SpawnRandomTile();
 void setScreenSizes();

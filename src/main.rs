@@ -10,7 +10,10 @@ use std::path::Path;
 use std::process;
 
 fn main() -> std::io::Result<()> {
-    let types: HashSet<&str> = ["int", "bool", "void", "float"].iter().cloned().collect();
+    let types: HashSet<&str> = ["int", "bool", "void", "float", "unsigned"]
+        .iter()
+        .cloned()
+        .collect();
     //let not_types: HashSet<&str> = ["if", "for", "while"].iter().cloned().collect();
     let args: Vec<String> = env::args().collect();
     //dbg!(args);
