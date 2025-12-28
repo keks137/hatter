@@ -33,7 +33,7 @@ fn main() -> std::io::Result<()> {
         process::exit(1);
     }
 
-    let header_path = file_path.with_extension("h");
+    // let header_path = file_path.with_extension("h");
     //let file_stem = file_path.file_stem().unwrap();
     let mut header_contents = String::new();
 
@@ -76,8 +76,9 @@ fn main() -> std::io::Result<()> {
         let _ = writeln!(&mut header_contents, "{};", buffer.trim());
     }
     let _ = writeln!(&mut header_contents, "#endif //{include_name}");
-    let mut header_file = File::create(header_path)?;
-    let _ = header_file.write_all(header_contents.as_bytes());
+    // let mut header_file = File::create(header_path)?;
+    // let _ = header_file.write_all(header_contents.as_bytes());
+    print!("{}",header_contents);
 
     Ok(())
 }
