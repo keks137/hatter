@@ -1,0 +1,3 @@
+package hatter
+main :: proc() {
+}
